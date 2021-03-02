@@ -1,21 +1,30 @@
 <template>
   <div id="app" class="wrapper">
     <div class="intro" v-if="!selectedRecipe">
-      <h1 class="title">Bug's Birthday Recipes</h1>
-      <p>Happy Birthday Amelia!</p>
-      <p>We have put together this collection of recipe's from your friend's and family for you to enjoy</p>
-    </div>
-    <div class="search">
-      <input class="input" type="text" placeholder="Search">
-      <div class="select">
-        <select>
-          <option v-for="recipeCategories">Select dropdown</option>
-        </select>
+      <div>
+        <img alt="Chocolate" src="./assets/chocolate-mousse.jpg">
+      </div>
+      <div class="intro__text">
+        <h1 class="title">Bug's Birthday Recipes</h1>
+        <p>Happy Birthday Amelia! 🎂</p>
+        <p>We thought we would assemble a special birthday compilation of recipes and love from all your fam and pals.</p>
+        <p>We hope you enjoy!</p>
+        <p>Love Jack & Joce ❤️</p>
+      </div>
+      <div class="bottom-image">
+        <img alt="Marmite and Peanut Butter" src="./assets/marmite-peanut-butter.jpg">
       </div>
     </div>
-    <recipe-details @back="selectedRecipe = null" v-if="selectedRecipe" :recipe="selectedRecipe"></recipe-details>
-    <div class="recipe-box" v-if="!selectedRecipe">
-      <recipe-thumbnail v-for="recipe in recipes" :recipe="recipe" @recipeSelected="selectRecipe($event)" />
+    <div v-if="!selectedRecipe" class="tabs is-centered">
+      <ul>
+        <li v-for="category in categories" @click="selectedCategory = category.id" :class="{ 'is-active': category.id === selectedCategory }"><a>{{ category.name }}</a></li>
+      </ul>
+    </div>
+    <div class="body">
+      <recipe-details @back="selectedRecipe = null" v-if="selectedRecipe" :recipe="selectedRecipe"></recipe-details>
+      <div class="recipe-box" v-if="!selectedRecipe">
+        <recipe-thumbnail v-for="recipe in filteredRecipes" :recipe="recipe" @recipeSelected="selectRecipe($event)" />
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +42,34 @@ export default class App extends Vue {
   recipes: AxiosResponse[] = [];
   errors: [] = [];
   selectedRecipe: Object | null = null;
+  selectedCategory: string | null = null;
+
+  categories: Array<Object> = [
+    {
+      id: '',
+      name: 'All',
+    },
+    {
+      id: 'Breakfast/Brunch',
+      name: 'Breakfast',
+    },
+    {
+      id: 'Main Course',
+      name: 'Main Course',
+    },
+    {
+      id: 'Small Plate',
+      name: 'Small Plate',
+    },
+    {
+      id: 'Drink',
+      name: 'Drink',
+    },
+    {
+      id: 'Pudding',
+      name: 'Pudding',
+    },
+  ];
 
   mounted() {
     axios
@@ -42,17 +79,38 @@ export default class App extends Vue {
       .then(response => {
         this.recipes = response.data;
       })
-      .catch(e => {
-        this.errors.push(e);
-      });
   }
 
-  get recipeCategories(): array {
-    this.recipes
+  get filteredRecipes(): Array<Object> {
+    if (this.selectedCategory) {
+      const categoryRecipes = this.recipes.filter(recipe => recipe.category === this.selectedCategory);
+      return this.shuffle(categoryRecipes);
+    }
+    return this.shuffle(this.recipes);
   }
 
   selectRecipe(recipe: Object) {
     this.selectedRecipe = recipe;
+    window.scrollTo(0,0);
+  }
+
+  shuffle(array: Array<Object>) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
   }
 }
 </script>
@@ -63,13 +121,28 @@ export default class App extends Vue {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
-  margin-left: 2em;
-  margin-right: 3em;
+}
+.body {
+  margin: 1em;
 }
 .intro {
-  h1, p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #DFDFD7;
+  .intro__text {
+    padding: 1em;
     text-align: center;
+  }
+  img {
+    width: 600px;
+    max-width: 100%;
+  }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    .bottom-image {
+      display: none;
+    }
   }
 }
 .recipe-box {
@@ -78,6 +151,8 @@ export default class App extends Vue {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1em;
   padding-top: 1em;
+  margin-left: 2em;
+  margin-right: 3em
 }
 .thumb {
   width: 100%;
