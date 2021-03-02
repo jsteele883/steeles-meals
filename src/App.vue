@@ -39,7 +39,7 @@ import RecipeDetails from '@/components/RecipeDetails.vue';
   components: {RecipeDetails, RecipeThumbnail }
 })
 export default class App extends Vue {
-  recipes: AxiosResponse[] = [];
+  recipes: Array<Object> = [];
   errors: [] = [];
   selectedRecipe: Object | null = null;
   selectedCategory: string | null = null;
@@ -83,6 +83,7 @@ export default class App extends Vue {
 
   get filteredRecipes(): Array<Object> {
     if (this.selectedCategory) {
+      // @ts-ignore
       const categoryRecipes = this.recipes.filter(recipe => recipe.category === this.selectedCategory);
       return this.shuffle(categoryRecipes);
     }
