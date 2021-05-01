@@ -1,18 +1,14 @@
 <template>
   <div id="app" class="wrapper">
     <div class="intro" v-if="!selectedRecipe">
-      <div>
-        <img alt="Chocolate" src="./assets/chocolate-mousse.jpg">
+      <div class="intro__logo">
+        <img src="https://drive.google.com/uc?id=1oz4Vx1YbIFkGh07idbr9yN79XF9pSxpw" alt="Claire turns 30">
       </div>
       <div class="intro__text">
-        <h1 class="title">Bug's Birthday Recipes</h1>
-        <p>Happy Birthday Amelia! 🎂</p>
+        <p>Happy Birthday Claire! 🎂</p>
         <p>We thought we would assemble a special birthday compilation of recipes and love from all your fam and pals.</p>
         <p>We hope you enjoy!</p>
-        <p>Love Jack & Joce ❤️</p>
-      </div>
-      <div class="bottom-image">
-        <img alt="Marmite and Peanut Butter" src="./assets/marmite-peanut-butter.jpg">
+        <p>Love Joce & Jack ❤️</p>
       </div>
     </div>
     <div v-if="!selectedRecipe" class="tabs is-centered">
@@ -74,7 +70,7 @@ export default class App extends Vue {
   mounted() {
     axios
       .get(
-        `https://jsteele883.api.stdlib.com/gsheets-database-example@dev/all_recipes/`
+        `https://jsteele883.api.stdlib.com/claire-recipes@dev/all_recipes/`
       )
       .then(response => {
         this.recipes = response.data;
@@ -128,9 +124,14 @@ export default class App extends Vue {
 }
 .intro {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #DFDFD7;
+  .intro__logo img {
+    width: 200px;
+    padding: 10px;
+  }
   .intro__text {
     padding: 1em;
     text-align: center;
