@@ -1,14 +1,14 @@
 <template>
   <div id="app" class="wrapper">
     <div class="intro" v-if="!selectedRecipe">
+      <div class="photo">
+        <img src="https://drive.google.com/uc?id=1XErPC-MRXPO66kahA63HEsFruANR_JlG" alt="baby photo" />
+      </div>
       <div class="intro__logo">
         <img src="https://drive.google.com/uc?id=1oz4Vx1YbIFkGh07idbr9yN79XF9pSxpw" alt="Claire turns 30">
       </div>
-      <div class="intro__text">
-        <p>Happy Birthday Claire! 🎂</p>
-        <p>We thought we would assemble a special birthday compilation of recipes and love from all your fam and pals.</p>
-        <p>We hope you enjoy!</p>
-        <p>Love Joce & Jack ❤️</p>
+      <div class="photo">
+        <img src="https://drive.google.com/uc?id=1KsLDDmUXZNRXCNmCLKcvEJgIaLBbbgiZ" alt="baby photo" />
       </div>
     </div>
     <div v-if="!selectedRecipe" class="tabs is-centered">
@@ -124,12 +124,11 @@ export default class App extends Vue {
 }
 .intro {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #DFDFD7;
+  background: #feefd9;
   .intro__logo img {
-    width: 200px;
+    width: 400px;
     padding: 10px;
   }
   .intro__text {
@@ -139,6 +138,10 @@ export default class App extends Vue {
   img {
     width: 600px;
     max-width: 100%;
+  }
+  .photo img {
+    height: 350px;
+    object-fit: cover;
   }
   @media screen and (max-width: 768px) {
     flex-direction: column;

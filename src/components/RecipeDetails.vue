@@ -39,7 +39,7 @@ export default class RecipeDetails extends Vue {
 
   firstPhoto(imageSrc: string) {
     let firstPhoto = imageSrc.split(",")[0];
-    return firstPhoto.replace("open", "uc");
+    return firstPhoto.replace("open", "uc").replace("/view?usp=sharing", "").replace("/file/d/", "/uc?id=");
   }
 }
 </script>
